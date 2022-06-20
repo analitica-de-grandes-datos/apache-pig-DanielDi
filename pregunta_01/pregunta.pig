@@ -15,10 +15,11 @@ $ pig -x local -f pregunta.pig
 
 data = LOAD 'data.tsv' USING PigStorage('\t')
     AS (
-            letra:chararray,
-            fecha:chararray,
+            letter:chararray,
+            date:chararray,
             num:int
     );
-grupos = GROUP data BY letra;
-conteo = FOREACH grupos GENERATE group, COUNT(data);
-STORE conteo INTO 'output' USING PigStorage(',');
+
+groups = GROUP data BY letter;
+count = FOREACH groups GENERATE group, COUNT(data);
+STORE count INTO 'output' USING PigStorage(',');
