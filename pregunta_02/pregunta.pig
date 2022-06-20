@@ -20,8 +20,5 @@ data = LOAD 'data.tsv' USING PigStorage('\t')
             num:int
     );
 
-B = GROUP data BY letter;
-C = FOREACH B {
-    sort = ORDER letter BY num DESC;
-   };
-STORE C INTO 'output' USING PigStorage(',');
+ordered = ORDER data BY letter ASC, num ASC;
+STORE ordered INTO 'output' USING PigStorage(',');
