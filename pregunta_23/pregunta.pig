@@ -22,3 +22,7 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+filtered_data = FILTER data BY (color MATCHES '.*[aeiou]$');
+name_color = FOREACH filtered_data GENERATE name, color;
+
+STORE name_color INTO 'output' USING PigStorage(',');

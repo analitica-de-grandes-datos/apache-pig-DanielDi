@@ -21,3 +21,15 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+data = LOAD 'data.csv' USING PigStorage(',') 
+    AS (
+        id:int, 
+        name:chararray, 
+        lastName:chararray
+        );
+
+counted_names = FOREACH data GENERATE lastName, SIZE(lastName) as nameLenght;
+ordered_names = ORDER counted_names BY nameLenght DESC, lastName ASC;
+limited_names = LIMIT ordered_names 5;
+
+STORE limited_names INTO 'output' USING PigStorage(',');
