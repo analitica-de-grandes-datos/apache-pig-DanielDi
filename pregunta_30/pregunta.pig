@@ -34,3 +34,40 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+data = LOAD 'data.csv' USING PigStorage(',') 
+    AS (
+        id:int, 
+        name:chararray, 
+        lastName:chararray,
+        date:chararray,
+        color:chararray
+        );
+
+B = FOREACH data GENERATE ToDate(date, 'yyyy-MM-dd') AS date;
+
+C = FOREACH B GENERATE ToString(date, 'yyyy-MM-dd') AS complete, ToString(date, 'dd') AS dd, GetDay(date) AS d, LOWER(ToString(date, 'EEE')) AS day;
+
+D = FOREACH C GENERATE complete, dd, d, REPLACE(
+                                            REPLACE(
+                                                REPLACE(
+                                                    REPLACE(
+                                                        REPLACE(
+                                                            REPLACE(day, 'mon','lun'), 
+                                                            'tue', 'mar'), 
+                                                        'wed', 'mie'),
+                                                    'thu','jue'),
+                                                'fri','vie'),
+                                            'sun', 'dom'),
+                                            REPLACE(
+                                                REPLACE(
+                                                    REPLACE(
+                                                        REPLACE(
+                                                            REPLACE(
+                                                                REPLACE(day, 'mon','lunes'), 
+                                                                'tue', 'martes'), 
+                                                            'wed', 'miercoles'),
+                                                        'thu','jueves'),
+                                                    'fri','viernes'),
+                                                'sun', 'domingo');
+
+STORE D INTO 'output' USING PigStorage(',');

@@ -14,3 +14,17 @@ $ pig -x local -f pregunta.pig
         >>> Escriba su respuesta a partir de este punto <<<
 */
 
+data = LOAD 'data.csv' USING PigStorage(',') 
+    AS (
+        id:int, 
+        name:chararray, 
+        lastName:chararray,
+        date:chararray,
+        color:chararray
+        );
+
+B = FOREACH data GENERATE ToDate(date, 'yyyy-MM-dd') AS date2;
+C = GROUP B BY ToString(date2, 'yyyy');
+D = FOREACH C GENERATE group, COUNT(B);
+
+STORE D INTO 'output' USING PigStorage(',');
