@@ -31,7 +31,7 @@ data = LOAD 'data.csv' USING PigStorage(',')
         color:chararray
         );
 
-filtered_data = FILTER data BY (color MATCHES '.*n'');
+filtered_data = FILTER data BY (color MATCHES '.*n');
 name_color = FOREACH filtered_data GENERATE name, color;
 
 STORE name_color INTO 'output' USING PigStorage(',');
